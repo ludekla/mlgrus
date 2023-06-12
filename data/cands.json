@@ -1,0 +1,100 @@
+[
+    {
+        "level": "Senior",
+        "lang": "Java",
+        "tweets": false,
+        "phd": false,
+        "didwell": false
+    },
+    {
+        "level": "Senior",
+        "lang": "Java",
+        "tweets": false,
+        "phd": true,
+        "didwell": false
+    },
+    {
+        "level": "Mid",
+        "lang": "Python",
+        "tweets": false,
+        "phd": false,
+        "didwell": true
+    },
+    {
+        "level": "Junior",
+        "lang": "Python",
+        "tweets": false,
+        "phd": false,
+        "didwell": true
+    },
+    {
+        "level": "Junior",
+        "lang": "R",
+        "tweets": true,
+        "phd": false,
+        "didwell": true
+    },
+    {
+        "level": "Junior",
+        "lang": "R",
+        "tweets": true,
+        "phd": true,
+        "didwell": false
+    },
+    {
+        "level": "Mid",
+        "lang": "R",
+        "tweets": true,
+        "phd": true,
+        "didwell": true
+    },
+    {
+        "level": "Senior",
+        "lang": "Python",
+        "tweets": false,
+        "phd": false,
+        "didwell": false
+    },
+    {
+        "level": "Senior",
+        "lang": "R",
+        "tweets": true,
+        "phd": false,
+        "didwell": true
+    },
+    {
+        "level": "Junior",
+        "lang": "Python",
+        "tweets": true,
+        "phd": false,
+        "didwell": true
+    },
+    {
+        "level": "Senior",
+        "lang": "Python",
+        "tweets": true,
+        "phd": true,
+        "didwell": true
+    },
+    {
+        "level": "Mid",
+        "lang": "Python",
+        "tweets": false,
+        "phd": true,
+        "didwell": true
+    },
+    {
+        "level": "Mid",
+        "lang": "Java",
+        "tweets": true,
+        "phd": false,
+        "didwell": true
+    },
+    {
+        "level": "Junior",
+        "lang": "Python",
+        "tweets": false,
+        "phd": true,
+        "didwell": false
+    }
+]
