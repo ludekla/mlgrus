@@ -2,4 +2,4 @@
 
 # Book
 
-Joel Grus: Machine Learning from Scratch, O'Reilly (YYYY)
+Joel Grus: Machine Learning from Scratch, O'Reilly (2019)

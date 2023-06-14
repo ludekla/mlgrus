@@ -62,3 +62,15 @@ func NewCSVData[T any](path string, header bool, conv Converter[T]) CSVData[T] {
 	}
 	return CSVData[T]{Header: head, Records: rows}
 }
+
+func (c CSVData[T]) Size() int {
+	return len(c.Records)
+}
+
+func Transform(data []Row[float64]) []Point {
+	pts := make([]Point, len(data))
+	for i, row := range data {
+		pts[i] = Point(row)
+	}
+	return pts
+}
