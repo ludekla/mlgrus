@@ -1,9 +1,8 @@
-package main
+package tree
 
 import (
 	"encoding/json"
 	"encoding/csv"
-	"fmt"
 	"os"
 	"io/ioutil"
 	"log"
@@ -39,7 +38,7 @@ type Partition map[interface{}][]*Candidate
 
 func fromJSON(jsnfile string) []*Candidate {
 	var cands []*Candidate
-	data, err := ioutil.ReadFile(jsnfile) 
+	data, err := ioutil.ReadFile(jsnfile)
 	if err != nil {
 		log.Fatalf("cannot read file %s, error: %v\n", jsnfile, err)
 	}
@@ -50,7 +49,7 @@ func fromJSON(jsnfile string) []*Candidate {
 	return cands
 }
 
-func fromCSV(csvfile string) []*Candidate {
+func FromCSV(csvfile string) []*Candidate {
 	var cands []*Candidate
 	file, err := os.Open(csvfile)
 	if err != nil {
@@ -103,11 +102,11 @@ func entropy(probs []float64) float64 {
 	return sum
 }
 
-func dataEntropy(data []interface{}) float64 {
+func DataEntropy(data []interface{}) float64 {
 	return entropy(clsprobs(data))
 }
 
-func partitionBy(cands []*Candidate, attr string) Partition {
+func PartitionBy(cands []*Candidate, attr string) Partition {
 	partition := make(Partition)
 	for _, cand := range cands {
 		value := cand.Get(attr)
@@ -118,7 +117,7 @@ func partitionBy(cands []*Candidate, attr string) Partition {
 	return partition
 }
 
-func partitionEntropyBy(partition Partition, attr string) float64 {
+func PartitionEntropyBy(partition Partition, attr string) float64 {
 	sum := 0.0
 	N := 0
 	for _, subset := range partition {
@@ -126,9 +125,9 @@ func partitionEntropyBy(partition Partition, attr string) float64 {
 		N += n
 		data := make([]interface{}, n)
 		for i, cand := range subset {
-			data[i] = cand.Get(attr) 
+			data[i] = cand.Get(attr)
 		}
-		sum += float64(n) * dataEntropy(data)
+		sum += float64(n) * DataEntropy(data)
 	}
 	return sum / float64(N)
 }
@@ -141,7 +140,7 @@ type Tree struct {
 
 type Branches map[interface{}]*Tree
 
-func NewTree(attr string, val bool, b Branches) *Tree {
+func New(attr string, val bool, b Branches) *Tree {
 	return &Tree{attrib: attr, value: val, branches: b}
 }
 
@@ -156,7 +155,7 @@ func (t *Tree) Classify(cand *Candidate) bool {
 	}
 }
 
-func buildTree(cands []*Candidate, splitAttrs []string, targetAttr string) *Tree {
+func BuildTree(cands []*Candidate, splitAttrs []string, targetAttr string) *Tree {
 	labels := make(map[interface{}]int)
 	for _, cand := range cands {
 		val := cand.Get(targetAttr)
@@ -171,14 +170,14 @@ func buildTree(cands []*Candidate, splitAttrs []string, targetAttr string) *Tree
 		}
 	}
 	if len(labels) == 1 || len(splitAttrs) == 0 {
-		return NewTree("", mostCommon.(bool), nil)
+		return New("", mostCommon.(bool), nil)
 	}
 	var bestAttr string
 	var bestPartition Partition
 	min := 1.0
 	for _, attr := range splitAttrs {
-		partition := partitionBy(cands, attr)
-		imp := partitionEntropyBy(partition, targetAttr)
+		partition := PartitionBy(cands, attr)
+		imp := PartitionEntropyBy(partition, targetAttr)
 		if imp < min {
 			min = imp
 			bestAttr = attr
@@ -193,70 +192,7 @@ func buildTree(cands []*Candidate, splitAttrs []string, targetAttr string) *Tree
 	}
 	branches := make(Branches)
 	for val, subset := range bestPartition {
-		branches[val] = buildTree(subset, attrs, targetAttr)
+		branches[val] = BuildTree(subset, attrs, targetAttr)
 	}
-	return NewTree(bestAttr, mostCommon.(bool), branches)
-}
-
-func main() {
-
-	// cands := fromJSON("cands.json")
-	cands := fromCSV("cands.csv")
-	data := make([]interface{}, len(cands))
-	for i, cand := range cands {
-		data[i] = cand.Get("phd")
-	}
-	x := dataEntropy(data)
-	fmt.Printf("%v\n", x)
-
-	p := partitionBy(cands, "phd")
-	q := partitionBy(cands, "lang")
-
-	fmt.Printf("phd partition by phd %v\n", partitionEntropyBy(p, "phd"))
-	fmt.Printf("phd partition by lang %v\n", partitionEntropyBy(p, "lang"))
-
-	fmt.Printf("lang partition by phd %v\n", partitionEntropyBy(q, "phd"))
-	fmt.Printf("lang partition by lang %v\n", partitionEntropyBy(q, "lang"))
-
-	tree := NewTree(
-		"level",
-		false,
-		Branches{
-			"Junior": NewTree(
-				"phd", 
-				false,
-				Branches{
-					true: NewTree("", false, nil),  // leaves
-					false: NewTree("", true, nil),
-				},
-			),
-			"Mid": NewTree("", true, nil),
-			"Senior": NewTree(
-				"tweets",
-				false,
-				Branches{
-					true: NewTree("", true, nil),
-					false: NewTree("", false, nil),
-				},
-			),
-		},
-	)
-
-	for _, cand := range cands {
-		fmt.Printf("hire?: %v - %v\n", cand.Get("didwell"), tree.Classify(cand))
-	}
-
-	fmt.Println("learned tree")
-
-	mt := buildTree(cands, []string{"level", "lang", "tweets", "phd"}, "didwell")
-	for _, cand := range cands {
-		fmt.Printf("hire?: %v - %v\n", cand.Get("didwell"), mt.Classify(cand))
-	}
-
-	c := Candidate{Level: "Intern", Lang: "Java", Tweets: true, PhD: true, DidWell: false}
-	ans := tree.Classify(&c)
-    fmt.Printf("Hire?: handcrafted tree says %v\n", ans)
-    ans = mt.Classify(&c)
-    fmt.Printf("Hire?: trained tree says %v\n", ans)
-
+	return New(bestAttr, mostCommon.(bool), branches)
 }
