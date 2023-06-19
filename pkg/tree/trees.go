@@ -1,20 +1,20 @@
 package tree
 
 import (
-	"encoding/json"
 	"encoding/csv"
-	"os"
+	"encoding/json"
 	"io/ioutil"
 	"log"
 	"math"
+	"os"
 )
 
 type Candidate struct {
-	Level   string  `json:"level"`
-	Lang    string	`json:"lang"`
-	Tweets  bool	`json:"tweets"`
-	PhD     bool	`json:"phd"`
-	DidWell bool	`json:"didwell"`
+	Level   string `json:"level"`
+	Lang    string `json:"lang"`
+	Tweets  bool   `json:"tweets"`
+	PhD     bool   `json:"phd"`
+	DidWell bool   `json:"didwell"`
 }
 
 func (c *Candidate) Get(attr string) interface{} {
@@ -184,7 +184,7 @@ func BuildTree(cands []*Candidate, splitAttrs []string, targetAttr string) *Tree
 			bestPartition = partition
 		}
 	}
-	attrs := make([]string, 0, len(splitAttrs) - 1)
+	attrs := make([]string, 0, len(splitAttrs)-1)
 	for _, attr := range splitAttrs {
 		if attr != bestAttr {
 			attrs = append(attrs, attr)
