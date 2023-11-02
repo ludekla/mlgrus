@@ -33,7 +33,7 @@ func main() {
 				"phd",
 				false,
 				tree.Branches{
-					true: tree.New("", false, nil),  // leaves
+					true:  tree.New("", false, nil), // leaves
 					false: tree.New("", true, nil),
 				},
 			),
@@ -42,7 +42,7 @@ func main() {
 				"tweets",
 				false,
 				tree.Branches{
-					true: tree.New("", true, nil),
+					true:  tree.New("", true, nil),
 					false: tree.New("", false, nil),
 				},
 			),
@@ -62,7 +62,7 @@ func main() {
 
 	c := tree.Candidate{Level: "Intern", Lang: "Java", Tweets: true, PhD: true, DidWell: false}
 	ans := t.Classify(&c)
-    fmt.Printf("Hire?: handcrafted tree says %v\n", ans)
-    ans = mt.Classify(&c)
-    fmt.Printf("Hire?: trained tree says %v\n", ans)
+	fmt.Printf("Hire?: handcrafted tree says %v\n", ans)
+	ans = mt.Classify(&c)
+	fmt.Printf("Hire?: trained tree says %v\n", ans)
 }

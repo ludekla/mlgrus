@@ -5,7 +5,7 @@ import (
 )
 
 func TestCSVFloat(t *testing.T) {
-	csv := NewCSVData("../../data/test_utils.csv", true, AtoF)
+	csv := NewCSVData("../../data/csv/test_utils.csv", true, AtoF)
 	header := []string{"A", "B", "C", "T"}
 	for i, ch := range csv.Header {
 		if ch != header[i] {
@@ -23,7 +23,7 @@ func TestCSVFloat(t *testing.T) {
 }
 
 func TestCSVString(t *testing.T) {
-	csv := NewCSVData("../../data/test_utils.csv", false, AtoA)
+	csv := NewCSVData("../../data/csv/test_utils.csv", false, AtoA)
 	rows := [][]string{
 		{"A", "B", "C", "T"},
 		{"1.1", "-2.4", "8.9", "1"},

@@ -1,14 +1,14 @@
 package main
 
 import (
-    "fmt"
-    "os"
-    "image"
-    "image/color"
-    "flag"
+	"flag"
+	"fmt"
+	"image"
+	"image/color"
+	"os"
 
-    "mlgrus/pkg/cluster"
-    "mlgrus/pkg/utils"
+	"mlgrus/pkg/cluster"
+	"mlgrus/pkg/utils"
 )
 
 var k = flag.Int("k", 3, "number of clusters")
@@ -37,23 +37,23 @@ func transformImage(km *cluster.KMeans, img image.Image) image.Image {
 
 func main() {
 
-    flag.Parse()
+	flag.Parse()
 
 	img, err := utils.LoadImage("data/pics/lutz.jpg")
-    if err != nil {
-        fmt.Printf("Cannot load image file: %v", err)
-        os.Exit(1)
-    }
+	if err != nil {
+		fmt.Printf("Cannot load image file: %v", err)
+		os.Exit(1)
+	}
 
 	pixels := utils.GetPixelData(img)
 
-    fmt.Println(*k, len(pixels))
+	fmt.Println(*k, len(pixels))
 
 	km := cluster.NewKMeans(*k)
 	e := km.Fit(pixels)
 	fmt.Printf("%v %v\n", e, km.Means)
 
 	newImg := transformImage(km, img)
-    utils.SaveImage(newImg, fmt.Sprintf("data/pics/lutz_%d.jpg", *k))
+	utils.SaveImage(newImg, fmt.Sprintf("data/pics/lutz_%d.jpg", *k))
 
 }

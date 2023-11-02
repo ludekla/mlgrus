@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"sort"
 	"log"
+	"sort"
 )
 
 type Columns map[string]string
@@ -54,13 +54,14 @@ func NewTable(cols Columns, rows []Row) *Table {
 	}
 	return &Table{Cols: cols, Rows: rows}
 }
+
 // implmentation of sort.Interface
 func (tb *Table) Len() int {
 	return len(tb.Rows)
 }
 
 func (tb *Table) Swap(i, j int) {
-	tb.Rows[i], tb.Rows[j] = tb.Rows[j], tb.Rows[i]  
+	tb.Rows[i], tb.Rows[j] = tb.Rows[j], tb.Rows[i]
 }
 
 func (tb *Table) Less(i, j int) bool {
@@ -153,7 +154,7 @@ func (tb *Table) Limit(nRows int) *Table {
 	for i, row := range tb.Rows {
 		if i >= nRows {
 			break
-		} 
+		}
 		ntb.Rows[i] = row.Copy()
 	}
 	return ntb
@@ -163,7 +164,7 @@ type Calculation func(Row) float64
 
 func (tb *Table) Select(
 	keepCols []string, // columns to keep of the old ones
-	addCols  map[string]Calculation, // additional columns to compute
+	addCols map[string]Calculation, // additional columns to compute
 ) *Table {
 	var newCols = make(Columns)
 	if keepCols == nil {
@@ -194,12 +195,12 @@ func (tb *Table) Select(
 	return NewTable(newCols, newRows)
 }
 
-type Aggregators map[string]func([]Row)float64
+type Aggregators map[string]func([]Row) float64
 
 func (tb *Table) GroupBy(
-	groupByCols []string, 
+	groupByCols []string,
 	aggregates Aggregators,
-	having func([]Row)bool,
+	having func([]Row) bool,
 ) *Table {
 	if having == nil {
 		having = func(rows []Row) bool { return true }
@@ -271,7 +272,7 @@ func (tb *Table) Join(otherTb *Table, leftJoin bool) *Table {
 			if isJoin(orow) {
 				otherRows = append(otherRows, orow)
 			}
-		} 
+		}
 		for _, orow := range otherRows {
 			newRow := row.Copy()
 			newRow.Update(orow)
@@ -295,7 +296,6 @@ func sumUids(rows []Row) float64 {
 	}
 	return sum
 }
-
 
 func main() {
 

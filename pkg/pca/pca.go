@@ -1,12 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"encoding/csv"
-	"os"
-	"strconv"
+	"fmt"
 	"math"
 	"math/rand"
+	"os"
+	"strconv"
 )
 
 // data vector
@@ -51,16 +51,16 @@ func loadData(filename string) ([]Vector, []int) {
 		for j, item := range record[:n-1] {
 			x[j], err = strconv.ParseFloat(item, 64)
 			if err != nil {
-				fmt.Println("failed to convert element %d in line %d", j, i)
+				fmt.Printf("failed to convert element %d in line %d\n", j, i)
 				continue
 			}
 		}
 		X[i] = x
 		val, err := strconv.ParseInt(record[n-1], 0, 0)
 		if err != nil {
-			fmt.Println("failed to parse label in line %d", i)
+			fmt.Printf("failed to parse label in line %d\n", i)
 		}
-		y[i] = int(val)  // int64 -> int
+		y[i] = int(val) // int64 -> int
 	}
 	return X, y
 }
@@ -78,7 +78,7 @@ func demean(data []Vector) []Vector {
 	}
 	centred := make([]Vector, len(data))
 	for i, row := range data {
-		rowc := make(Vector, len(row))  // centred row
+		rowc := make(Vector, len(row)) // centred row
 		for j, elem := range row {
 			rowc[j] = elem - means[j]
 		}
@@ -106,7 +106,7 @@ func direction(vec Vector) Vector {
 
 func dirVar(data []Vector, vec Vector) float64 {
 	var sum float64
-	direc := direction(vec) 
+	direc := direction(vec)
 	for _, x := range data {
 		z := direc.Dot(x)
 		sum += z * z
@@ -139,7 +139,7 @@ func FirstPC(data []Vector, nRounds int, stepSize float64) Vector {
 	for r := 0; r < nRounds; r++ {
 		grad := dirVarGrad(data, guess)
 		for i, val := range guess {
-			guess[i] = val - stepSize * grad[i]
+			guess[i] = val - stepSize*grad[i]
 		}
 	}
 	return direction(guess)
@@ -204,7 +204,7 @@ func main() {
 
 	comps := PCA(Xcentred, 3)
 	for i, comp := range comps {
-		fmt.Printf("pc %d: %v\n", i + 1, comp)
+		fmt.Printf("pc %d: %v\n", i+1, comp)
 	}
 
 	tdata := transformem(comps, Xcentred)
@@ -214,6 +214,5 @@ func main() {
 
 	tvec := transform(comps, Xcentred[0])
 	fmt.Printf("%v -> %v\n", Xcentred[0], tvec)
-	
-}
 
+}

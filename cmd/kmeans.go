@@ -1,10 +1,10 @@
 package main
 
 import (
-    "fmt"
+	"fmt"
 
-    "mlgrus/pkg/cluster"
-    "mlgrus/pkg/utils"
+	"mlgrus/pkg/cluster"
+	"mlgrus/pkg/utils"
 )
 
 func kMeansError(k int, data []utils.Point) float64 {
@@ -15,12 +15,12 @@ func kMeansError(k int, data []utils.Point) float64 {
 func main() {
 
 	data := utils.NewCSVData("data/loci.csv", false, utils.AtoF)
-    points := utils.Transform(data.Records)
+	points := utils.Transform(data.Records)
 	size := data.Size()
 
 	errors := make([]float64, size)
 	for k, _ := range errors {
-		errors[k] = kMeansError(k + 1, points)
+		errors[k] = kMeansError(k+1, points)
 	}
 	fmt.Println(errors)
 
