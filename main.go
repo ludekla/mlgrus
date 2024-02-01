@@ -6,6 +6,6 @@ import (
 
 func main() {
 
-	fmt.Println("Hello Database!")
+	fmt.Println("Hello Data Scientist!")
 
 }
