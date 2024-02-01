@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"image"
 	"image/color"
+	"strings"
 	"os"
 
 	"mlgrus/pkg/cluster"
@@ -39,7 +40,10 @@ func main() {
 
 	flag.Parse()
 
-	img, err := utils.LoadImage("data/pics/lutz.jpg")
+	// Adapt image path here
+	path2img := "data/pics/lutz.jpg"
+
+	img, err := utils.LoadImage(path2img)
 	if err != nil {
 		fmt.Printf("Cannot load image file: %v", err)
 		os.Exit(1)
@@ -54,6 +58,9 @@ func main() {
 	fmt.Printf("%v %v\n", e, km.Means)
 
 	newImg := transformImage(km, img)
-	utils.SaveImage(newImg, fmt.Sprintf("data/pics/lutz_%d.jpg", *k))
+
+	exten := fmt.Sprintf("_%d.jpg", *k)
+	outpath := strings.Replace(path2img, ".jpg", exten, 1)
+	utils.SaveImage(newImg, outpath)
 
 }
